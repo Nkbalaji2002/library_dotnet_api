@@ -22,13 +22,16 @@ public class BooksController(IBookService service) : Controller
     public async Task<IActionResult> Create(CreateBookDto bookDto)
     {
         var created = await service.AddBook(bookDto);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id },
+            $"Book Id : {created.Id} created Successfully");
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateBookDto bookDto)
     {
-        return await service.UpdateBook(id, bookDto) ? NoContent() : NotFound($"Book with Id {id} Not Found");
+        return await service.UpdateBook(id, bookDto)
+            ? Ok($"Book Id {id} updated Successfully")
+            : NotFound($"Book with Id {id} Not Found");
     }
 
     [HttpDelete("{id}")]
